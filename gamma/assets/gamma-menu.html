@@ -1,0 +1,120 @@
+<div id="app"></div>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+:root{--paper:#F4EEE1;--card:#FBF8F1;--ink:#201E19;--soft:#6E6657;--faint:#9D9582;--line:#E4DAC4;--accent:#CD6A45;--deep:#B0532D;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"JetBrains Mono",monospace;}
+#app{max-width:660px;margin:0 auto;padding:26px 20px 40px;color:var(--ink);}
+.head{margin-bottom:22px;}
+.badge{display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:5px 11px;border-radius:6px;margin-bottom:14px;}
+h1{font-family:"Archivo";font-weight:900;font-size:30px;letter-spacing:-.02em;line-height:1.08;}
+.sub{margin-top:9px;font-size:13.5px;color:var(--soft);}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;}
+.cat{background:var(--card);border:1.5px solid var(--accent);border-radius:13px;padding:16px 17px;text-align:left;cursor:pointer;transition:.12s;display:flex;align-items:center;gap:12px;}
+.cat:hover{background:#fff;transform:translateY(-1px);box-shadow:0 6px 18px rgba(205,106,69,.15);}
+.cat .num{font-family:"Archivo";font-weight:900;font-size:15px;color:#fff;background:var(--accent);min-width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:none;}
+.cat .nm{display:block;font-family:"Archivo";font-weight:800;font-size:15px;line-height:1.12;}
+.cat .ct{display:block;font-size:11px;color:var(--faint);margin-top:3px;}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+.act{background:var(--ink);color:var(--paper);border:1.5px solid var(--accent);border-radius:13px;padding:15px 17px;text-align:left;cursor:pointer;transition:.12s;}
+.act:hover{transform:translateY(-1px);} .act.exp{background:var(--accent);color:#fff;border-color:var(--deep);}
+.act .t{font-family:"Archivo";font-weight:800;font-size:15px;} .act .d{font-size:11.5px;opacity:.8;margin-top:3px;}
+.back{background:none;border:0;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:6px 0;margin-bottom:10px;}
+.cathead{font-family:"Archivo";font-weight:900;font-size:24px;letter-spacing:-.02em;margin-bottom:4px;}
+.catsub{font-size:12.5px;color:var(--soft);margin-bottom:16px;}
+.plist{display:flex;flex-direction:column;gap:9px;}
+.p{background:var(--card);border:1.5px solid var(--accent);border-radius:11px;padding:13px 15px;text-align:left;cursor:pointer;transition:.12s;display:flex;align-items:center;gap:11px;}
+.p:hover{background:#fff;transform:translateX(2px);}
+.p .i{font-family:"Archivo";font-weight:800;font-size:12px;color:var(--accent);min-width:20px;}
+.p .pt{font-weight:600;font-size:13.5px;line-height:1.25;}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;}
+.tab{background:var(--card);border:1.5px solid var(--line);border-radius:8px;padding:7px 11px;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--soft);}
+.tab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+textarea{width:100%;min-height:120px;background:var(--card);border:1.5px solid var(--accent);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--ink);resize:vertical;line-height:1.5;}
+.cbtn{margin-top:14px;background:var(--accent);color:#fff;border:0;border-radius:11px;padding:14px 24px;font-family:"Archivo";font-weight:800;font-size:15px;cursor:pointer;}
+.cbtn:hover{background:var(--deep);}
+.hint{font-size:12px;color:var(--faint);margin-top:10px;}
+</style>
+<script>
+const DATA = [{"name": "Business Strategy", "n": 8, "prompts": ["Business Model Visual Map", "Offer Stack & Value Ladder Diagram", "Ideal Customer Profile Snapshot Deck", "Market Positioning Map", "90-Day Business Roadmap Timeline", "Revenue Streams Breakdown Dashboard", "Business Bottleneck & Opportunity Map", "Scale vs Simplify Decision Framework"]}, {"name": "Sales & Client Acquisition", "n": 8, "prompts": ["Sales Pipeline Visual Map", "Lead Source Breakdown Dashboard", "Ideal Buyer Journey Timeline", "Sales Call Flow Diagram", "Objection Response Matrix", "Follow-Up Sequence Timeline", "Inbound Lead Conversion Map", "Client Acquisition Channel Comparison"]}, {"name": "Content & Personal Brand", "n": 8, "prompts": ["Personal Brand Identity Snapshot", "Content Pillars Visual Map", "Audience Persona Breakdown Deck", "Content Engine Workflow Diagram", "Signature Ideas & Frameworks Library", "LinkedIn Post Anatomy Breakdown", "Authority Building Roadmap Timeline", "Content Repurposing System Map"]}, {"name": "Productivity & Systems", "n": 7, "prompts": ["Weekly Operating System Dashboard", "Daily Routine Flow Map", "Time Allocation Breakdown Chart", "Task Prioritization Decision Matrix", "Delegation & Automation Opportunity Map", "Deep Work Protection Framework", "Project Execution Timeline"]}, {"name": "Career & Growth", "n": 7, "prompts": ["Career Path Visual Roadmap", "Skill Gap & Development Map", "90-Day Career Progression Timeline", "Professional Strengths Snapshot", "Career Portfolio Story Deck", "Networking & Opportunity Map", "Future Role Readiness Framework"]}, {"name": "Personal Life", "n": 7, "prompts": ["Life Priorities Snapshot", "Personal Goals Roadmap", "Habit & Routine Tracker Dashboard", "Health & Energy Plan Visual", "Stress & Balance Framework", "Home & Family Operating System", "Pet Care Routine Dashboard"]}, {"name": "Fun & Viral", "n": 7, "prompts": ["Personality Breakdown Visual", "\"Roast My Life\" Improvement Deck", "Alternate Life Paths Map", "Personal Archetype Card", "Claude Knows Me Better Than My Friends Deck", "My Life as a Movie Poster", "Future Self Prediction Timeline"]}];
+const app = document.getElementById('app');
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function buildMsg(cat,title){
+  return 'Gamma Design Skill \u2014 build request.\nCategory: '+cat+'\nPrompt: "'+title+'"\n\nUse this exact prompt from the library. Ask me to fill in every [bracket] one at a time, show me the completed prompt to confirm, then build it in Gamma.';
+}
+function buildCustom(v){
+  return 'Gamma Design Skill \u2014 custom request.\nI want to design: '+v+'\n\nTurn this into a Gamma-ready prompt in the library style. Ask me for every detail, show me the completed prompt to confirm, then build it in Gamma.';
+}
+function getSend(){
+  try{ if(typeof sendPrompt==='function'){ return sendPrompt; } }catch(e){}
+  try{ if(window && typeof window.sendPrompt==='function'){ return window.sendPrompt; } }catch(e){}
+  return null;
+}
+function relay(msg){
+  var fn=getSend();
+  if(fn){ try{ fn(msg); return; }catch(e){} }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(msg).then(function(){relayed(msg,true);},function(){relayed(msg,false);});
+  } else { relayed(msg,false); }
+}
+function relayed(msg,copied){
+  app.innerHTML =
+    '<button class="back" data-nav="main">&larr; Back to menu</button>'
+    +'<div class="cathead">'+(copied?'Copied &#10003;':'One quick step')+'</div>'
+    +'<div class="catsub">'+(copied
+        ?'Your design request is on your clipboard. Paste it into the chat and send it \u2014 Claude will fill in the details and build it in Gamma.'
+        :'Copy the text below, paste it into the chat and send it \u2014 Claude will fill in the details and build it in Gamma.')+'</div>'
+    +'<textarea id="relaytext" readonly>'+esc(msg)+'</textarea>'
+    +'<button class="cbtn" data-nav="copy">&#9112; Copy again</button>';
+  var t=document.getElementById('relaytext'); if(t){ t.focus(); t.select(); }
+}
+function main(){
+  var cards=DATA.map(function(c,i){
+    return '<button class="cat" data-nav="cat:'+i+'"><span class="num">'+String(i+1).padStart(2,'0')+'</span><span><span class="nm">'+esc(c.name)+'</span><span class="ct">'+c.n+' prompts</span></span></button>';
+  }).join('');
+  app.innerHTML =
+    '<div class="head"><span class="badge">Gamma Design Skill</span><h1>What would you like to design today?</h1><div class="sub">7 categories &middot; 52 ready-to-run prompts</div></div>'
+    +'<div class="grid">'+cards+'</div>'
+    +'<div class="actions">'
+    +'<button class="act" data-nav="custom"><div class="t">&#9998; Custom</div><div class="d">Type your own idea</div></button>'
+    +'<button class="act exp" data-nav="expand"><div class="t">&#10530; Expand prompts</div><div class="d">Browse all 52 in tabs</div></button>'
+    +'</div>';
+}
+function cat(i){
+  var c=DATA[i];
+  var list=c.prompts.map(function(t,j){
+    return '<button class="p" data-nav="pick:'+i+':'+j+'"><span class="i">'+(j+1)+'</span><span class="pt">'+esc(t)+'</span></button>';
+  }).join('');
+  app.innerHTML='<button class="back" data-nav="main">&larr; All categories</button><div class="cathead">'+esc(c.name)+'</div><div class="catsub">'+c.n+' prompts &middot; pick one to build</div><div class="plist">'+list+'</div>';
+}
+function expand(){
+  var tabs=DATA.map(function(c,i){
+    return '<button class="tab'+(i===0?' on':'')+'" data-nav="tab:'+i+'" data-i="'+i+'">'+esc(c.name)+'</button>';
+  }).join('');
+  app.innerHTML='<button class="back" data-nav="main">&larr; Back</button><div class="cathead">All prompts</div><div class="catsub">Switch tabs to browse each category</div><div class="tabs">'+tabs+'</div><div id="tc"></div>';
+  tab(0);
+}
+function tab(i){
+  var els=document.querySelectorAll('.tab');
+  for(var k=0;k<els.length;k++){ els[k].classList.toggle('on', +els[k].dataset.i===i); }
+  var c=DATA[i];
+  document.getElementById('tc').innerHTML='<div class="plist">'+c.prompts.map(function(t,j){
+    return '<button class="p" data-nav="pick:'+i+':'+j+'"><span class="i">'+(j+1)+'</span><span class="pt">'+esc(t)+'</span></button>';
+  }).join('')+'</div>';
+}
+function custom(){
+  app.innerHTML='<button class="back" data-nav="main">&larr; Back</button><div class="cathead">Custom design</div><div class="catsub">Describe what you want to design and Claude will craft the prompt</div><textarea id="ct" placeholder="e.g. A visual onboarding checklist for new clients, in my brand style"></textarea><button class="cbtn" data-nav="sendcustom">Build this &rarr;</button><div class="hint">Claude will turn it into a Gamma-ready prompt, ask for details, then build it.</div>';
+}
+app.addEventListener('click',function(e){
+  var el=e.target.closest ? e.target.closest('[data-nav]') : null; if(!el) return;
+  var nav=el.getAttribute('data-nav');
+  if(nav==='main'){ main(); return; }
+  if(nav==='expand'){ expand(); return; }
+  if(nav==='custom'){ custom(); return; }
+  if(nav==='sendcustom'){ var v=(document.getElementById('ct').value||'').trim(); if(v){ relay(buildCustom(v)); } return; }
+  if(nav==='copy'){ var t=document.getElementById('relaytext'); if(t){ t.focus(); t.select(); if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t.value); } } return; }
+  if(nav.indexOf('cat:')===0){ cat(+nav.slice(4)); return; }
+  if(nav.indexOf('tab:')===0){ tab(+nav.slice(4)); return; }
+  if(nav.indexOf('pick:')===0){ var p=nav.split(':'); var c=DATA[+p[1]]; relay(buildMsg(c.name,c.prompts[+p[2]])); return; }
+});
+main();
+</script>
